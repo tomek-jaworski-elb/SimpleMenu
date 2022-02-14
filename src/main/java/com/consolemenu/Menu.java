@@ -1,16 +1,17 @@
 package com.consolemenu;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
-public class Menu {
 
-    private final List<String> mainMenu = new ArrayList<>(Arrays.asList("Początek", "Środek", "LowerMenu", "Zamknij program"));
-    private final List<String> lowerMenu = new ArrayList<>(Arrays.asList("Podmenu 0", "Podmenu 1", "Wróć wyżej"));
+public class Menu {
+    private final List<String> mainMenu;
+    private final List<String> lowerMenu;
 
     public Menu() {
+        this.mainMenu = ReadMenuItems.getStrings(Paths.get("src","main","resources","MainMenuItems.txt"));
+        this.lowerMenu = ReadMenuItems.getStrings(Paths.get("src","main","resources","LowerMenuItems.txt"));
     }
 
     public void start() {

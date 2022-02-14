@@ -1,0 +1,4 @@
+Początek
+Środek
+LowerMenu
+Zamknij program
