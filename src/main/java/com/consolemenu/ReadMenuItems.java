@@ -9,14 +9,17 @@ import java.util.List;
 
 public class ReadMenuItems {
 
-    final static Logger logger = Logger.getLogger(App.class);
+    final static Logger logger = Logger.getLogger(ReadMenuItems.class);
 
-    public static List<String> getStrings(Path fileWithPath) {
+    public static String[] getStrings(Path fileWithPath) {
         try {
-            return Files.readAllLines(fileWithPath);
+            List<String> tmpList = Files.readAllLines(fileWithPath);
+            String[] result = new String[tmpList.size()];
+            tmpList.toArray(result);
+            return result;
         } catch (IOException e) {
             logger.info("Error reading file");
-            return null;
+            return new String[0];
         }
     }
 }

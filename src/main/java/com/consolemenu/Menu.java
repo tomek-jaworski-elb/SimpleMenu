@@ -1,13 +1,11 @@
 package com.consolemenu;
 
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Scanner;
 
-
 public class Menu {
-    private final List<String> mainMenu;
-    private final List<String> lowerMenu;
+    private final String [] mainMenu;
+    private final String [] lowerMenu;
 
     public Menu() {
         this.mainMenu = ReadMenuItems.getStrings(Paths.get("src","main","resources","MainMenuItems.txt"));
@@ -44,23 +42,23 @@ public class Menu {
                                 break;
                             }
                         }
-                    } while (lowerMenuOption != lowerMenu.size() - 1);
+                    } while (lowerMenuOption != lowerMenu.length - 1);
                     break;
                 }
             }
-            if (menuOption == mainMenu.size() - 1) {
-                System.out.println(mainMenu.get(menuOption));
+            if (menuOption == mainMenu.length - 1) {
+                System.out.println(mainMenu[menuOption]);
             }
-        } while (menuOption != mainMenu.size() - 1);
+        } while (menuOption != mainMenu.length- 1);
     }
 
-    private void printMenu(List<String> strings) {
-        for (int i = 0; i < strings.size(); i++) {
-            System.out.println(i + ". " + strings.get(i));
+    private void printMenu(String [] strings) {
+        for (int i = 0; i < strings.length; i++) {
+            System.out.println(i + ". " + strings[i]);
         }
     }
 
-    private int readInput(List<String> menu) {
+    private int readInput(String [] menu) {
         int result = 0;
         boolean isValid;
 
@@ -71,7 +69,7 @@ public class Menu {
             String line = scanner.nextLine();
             try {
                 result = Integer.parseInt(line);
-                if ((result + 1 > menu.size()) || (result < 0)) {
+                if ((result + 1 > menu.length) || (result < 0)) {
                     throw new NumberFormatException();
                 }
                 isValid = true;
