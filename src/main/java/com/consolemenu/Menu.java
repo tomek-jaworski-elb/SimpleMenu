@@ -2,39 +2,37 @@ package com.consolemenu;
 
 import org.apache.log4j.Logger;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Menu {
-    private final String[] mainMenu;
-    private final String[] lowerMenu;
+    private final static String[] mainMenu = {"Zamknij program", "Początek", "Środek", "LowerMenu 1", "LowerMenu 2"};
+    private final static String[] lowerMenu = {"Wróć wyżej", "Podmenu 0", "Podmenu 1"};
 
     final static Logger logger = Logger.getLogger(Menu.class);
 
+    private static final Path MAIN_MANU_LABELS = Paths.get("src", "main", "resources", "MainMenuItems.txt");
+    private static final Path LOWER_MANU_LABELS = Paths.get("src", "main", "resources", "LowerMenuItems.txt");
 
-    private static final String[] PATH_MAIN_MENU = {"src", "main", "resources", "MainMenuItems.txt"};
-    private static final String[] PATH_LOWER_MENU = {"src", "main", "resources", "LowerMenuItems.txt"};
 
-    public Menu() {
-        String[] tmp1 = ReadMenuItems.getStrings(Paths.get(PATH_MAIN_MENU[0], PATH_MAIN_MENU[1],
-                PATH_MAIN_MENU[2], PATH_MAIN_MENU[3]));
-        if (Arrays.equals(tmp1, new String[0])) {
-            this.mainMenu = new String[0];
-            logger.info("Nie wczytano menu");
-        } else {
-            this.mainMenu = tmp1;
-        }
-        String[] tmp2 = ReadMenuItems.getStrings(Paths.get(PATH_LOWER_MENU[0], PATH_LOWER_MENU[1],
-                PATH_LOWER_MENU[2], PATH_LOWER_MENU[3]));
-        if (Arrays.equals(tmp2, new String[0])) {
-            this.lowerMenu = new String[0];
-            logger.info("Nie wczytano menu");
-
-        } else {
-            this.lowerMenu = tmp2;
-        }
-    }
+ //   public Menu() {
+//        String[] tmp1 = ReadMenuItems.getStrings(MAIN_MANU_LABELS);
+//        if (Arrays.equals(tmp1, new String[0])) {
+//            this.mainMenu = new String[0];
+//            logger.info("Nie wczytano menu");
+//        } else {
+//            this.mainMenu = tmp1;
+//        }
+//        String[] tmp2 = ReadMenuItems.getStrings(LOWER_MANU_LABELS);
+//        if (Arrays.equals(tmp2, new String[0])) {
+//            this.lowerMenu = new String[0];
+//            logger.info("Nie wczytano menu");
+//        } else {
+//            this.lowerMenu = tmp2;
+//        }
+//    }
 
     public void start() {
         int menuOption;
@@ -47,7 +45,7 @@ public class Menu {
             if (menuOption == mainMenu.length - 1) {
                 System.out.println(mainMenu[menuOption]);
             }
-        } while (menuOption != mainMenu.length - 1);
+        } while (menuOption != 0);
     }
 
     private void printMenu(String[] strings) {
@@ -68,8 +66,11 @@ public class Menu {
             printMenu(menu);
 
             Scanner scanner = new Scanner(System.in);
-            String line = scanner.nextLine();
             try {
+                String line = scanner.nextLine();
+                if (line.isEmpty() || line.isBlank() || line.equals("\n")) {
+                    throw new InputMismatchException("Empty string");
+                }
                 result = Integer.parseInt(line);
                 if ((result + 1 > menu.length) || (result < 0)) {
                     throw new NumberFormatException();
@@ -77,6 +78,8 @@ public class Menu {
                 isValid = true;
             } catch (NumberFormatException e) {
                 System.out.println("Podaj właściwą liczbę!");
+                isValid = false;
+            } catch (InputMismatchException e) {
                 isValid = false;
             }
         } while (!isValid);
@@ -88,9 +91,9 @@ public class Menu {
     }
 
     private void inputSwitcherMainManu(int menuOption) {
-        int lowerMenuOption;
+        int lowerMenuOption1, lowerMenuOption2;
         switch (menuOption) {
-            case 0: {
+            case 4: {
                 printObject(menuOption);
                 break;
             }
@@ -100,17 +103,24 @@ public class Menu {
             }
             case 2: {
                 do {
-                    lowerMenuOption = readInput(lowerMenu);
-                    inputSwitcheLowerMenu(lowerMenuOption);
-                } while (lowerMenuOption != lowerMenu.length - 1);
+                    lowerMenuOption1 = readInput(lowerMenu);
+                    inputSwitcherLowerMenu(lowerMenuOption1);
+                } while (lowerMenuOption1 != 0);
+                break;
+            }
+            case 3: {
+                do {
+                    lowerMenuOption2 = readInput(lowerMenu);
+                    inputSwitcherLowerMenu(lowerMenuOption2);
+                } while (lowerMenuOption2 != 0);
                 break;
             }
         }
     }
 
-    private void inputSwitcheLowerMenu(int lowerMenuOption) {
+    private void inputSwitcherLowerMenu(int lowerMenuOption) {
         switch (lowerMenuOption) {
-            case 0: {
+            case 3: {
                 printObject(lowerMenuOption);
                 break;
             }

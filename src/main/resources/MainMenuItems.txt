@@ -1,4 +1,5 @@
+Zamknij program
 Początek
 Środek
-LowerMenu
-Zamknij program
+LowerMenu 1
+LowerMenu 2
